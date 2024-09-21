@@ -1,7 +1,7 @@
-package com.victor.src.mapper;
+package com.victor.mapper;
 
-import com.victor.src.model.dto.PagamentoDTO;
-import com.victor.src.model.entity.Cobranca;
+import com.victor.model.dto.PagamentoDTO;
+import com.victor.model.entity.Cobranca;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

@@ -1,6 +1,6 @@
-package com.victor.src.messaging;
+package com.victor.messaging;
 
-import com.victor.src.model.dto.PagamentoDTO;
+import com.victor.model.dto.PagamentoDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;

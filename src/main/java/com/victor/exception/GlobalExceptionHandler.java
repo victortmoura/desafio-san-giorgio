@@ -1,4 +1,4 @@
-package com.victor.src.exception;
+package com.victor.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

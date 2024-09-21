@@ -1,13 +1,14 @@
-package com.victor.src.service;
+package com.victor.service;
 
-import com.victor.src.exception.CobrancaNotFoundException;
-import com.victor.src.exception.VendedorNotFoundException;
-import com.victor.src.messaging.SqsSender;
-import com.victor.src.model.dto.PagamentoDTO;
-import com.victor.src.model.dto.ProcessamentoPagamentoDTO;
+import com.victor.exception.CobrancaNotFoundException;
+import com.victor.exception.VendedorNotFoundException;
+import com.victor.messaging.SqsSender;
+import com.victor.model.dto.PagamentoDTO;
+import com.victor.model.dto.ProcessamentoPagamentoDTO;
+import com.victor.model.entity.*;
 import com.victor.src.model.entity.*;
-import com.victor.src.repository.CobrancaRepository;
-import com.victor.src.repository.VendedorRepository;
+import com.victor.repository.CobrancaRepository;
+import com.victor.repository.VendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

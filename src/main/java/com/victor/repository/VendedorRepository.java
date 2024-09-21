@@ -1,8 +1,8 @@
-package com.victor.src.repository;
+package com.victor.repository;
 
 import java.util.Optional;
 
-import com.victor.src.model.entity.Vendedor;
+import com.victor.model.entity.Vendedor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VendedorRepository extends JpaRepository<Vendedor, Long> {

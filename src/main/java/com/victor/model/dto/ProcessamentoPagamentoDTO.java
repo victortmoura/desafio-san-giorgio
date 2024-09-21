@@ -1,4 +1,4 @@
-package com.victor.src.model.dto;
+package com.victor.model.dto;
 
 import java.util.List;
 

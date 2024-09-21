@@ -1,4 +1,4 @@
-package com.victor.src.model.dto;
+package com.victor.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,7 +1,7 @@
-package com.victor.src.model.entity;
+package com.victor.model.entity;
 
-import com.victor.src.messaging.SqsSender;
-import com.victor.src.model.dto.PagamentoDTO;
+import com.victor.messaging.SqsSender;
+import com.victor.model.dto.PagamentoDTO;
 
 public class PagamentoTotal extends Pagamento {
 

@@ -1,4 +1,4 @@
-package com.victor.src.exception;
+package com.victor.exception;
 
 import lombok.*;
 import java.time.LocalDateTime;

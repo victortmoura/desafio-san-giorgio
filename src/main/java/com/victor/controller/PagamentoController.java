@@ -1,7 +1,7 @@
-package com.victor.src.controller;
+package com.victor.controller;
 
-import com.victor.src.model.dto.ProcessamentoPagamentoDTO;
-import com.victor.src.service.PagamentoService;
+import com.victor.model.dto.ProcessamentoPagamentoDTO;
+import com.victor.service.PagamentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
