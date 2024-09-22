@@ -1,5 +1,6 @@
-INSERT INTO vendedores (id, codigo_vendedor, nome) VALUES (0, 'VEND123', 'João Silva');
-INSERT INTO vendedores (id, codigo_vendedor, nome) VALUES (1, 'VEND456', 'Maria Oliveira');
+INSERT INTO vendedores (codigo_vendedor, nome) VALUES ('VEND123', 'João Silva');
+INSERT INTO vendedores (codigo_vendedor, nome) VALUES ('VEND456', 'Maria Oliveira');
 
-INSERT INTO cobrancas (id, codigo_cobranca, valor_original) VALUES (0, 'Cobranca1', 100.0);
-INSERT INTO cobrancas (id, codigo_cobranca, valor_original) VALUES (1, 'Cobranca2', 50.0);
+INSERT INTO cobrancas (codigo_cobranca, valor_original, codigo_vendedor) VALUES ('Cobranca1', 100.0, 'VEND123');
+INSERT INTO cobrancas (codigo_cobranca, valor_original, codigo_vendedor) VALUES ('Cobranca2', 50.0, 'VEND123');
+INSERT INTO cobrancas (codigo_cobranca, valor_original, codigo_vendedor) VALUES ('Cobranca3', 75.0, 'VEND456');
