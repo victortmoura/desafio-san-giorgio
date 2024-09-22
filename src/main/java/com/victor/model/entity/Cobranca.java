@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 public class Cobranca {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "codigo_cobranca", unique = true, nullable = false)
     private String codigoCobranca;
 
     @Column(name = "valor_original", nullable = false)
     private Double valorOriginal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "codigo_vendedor", nullable = false)
+    private Vendedor vendedor;
 
 }
