@@ -1,7 +1,8 @@
 package com.victor.model.entity;
 
 import com.victor.messaging.SqsSender;
-import com.victor.model.dto.PagamentoDTO;
+import com.victor.model.dto.request.PagamentoDetalheRequestDTO;
+import com.victor.model.enums.StatusPagamento;
 import lombok.*;
 
 @Data
@@ -11,7 +12,7 @@ public abstract class Pagamento {
 
     private String codigoCobranca;
     private Double valorPago;
-    private String statusPagamento;
+    private StatusPagamento statusPagamento;
 
-    public abstract void enviarParaFila(SqsSender sqsSender, PagamentoDTO pagamentoDTO);
+    public abstract void enviarParaFila(SqsSender sqsSender, PagamentoDetalheRequestDTO pagamentoDetalheRequestDTO);
 }
