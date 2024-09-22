@@ -2,16 +2,21 @@ package com.victor.service;
 
 import com.victor.exception.CobrancaNotFoundException;
 import com.victor.exception.VendedorNotFoundException;
+import com.victor.mapper.PagamentoMapper;
 import com.victor.messaging.SqsSender;
-import com.victor.model.dto.PagamentoDTO;
-import com.victor.model.dto.ProcessamentoPagamentoDTO;
+import com.victor.model.dto.request.PagamentoDetalheRequestDTO;
+import com.victor.model.dto.request.PagamentoRequestDTO;
+import com.victor.model.dto.response.PagamentoDetalheResponseDTO;
+import com.victor.model.dto.response.PagamentoResponseDTO;
 import com.victor.model.entity.*;
-import com.victor.src.model.entity.*;
 import com.victor.repository.CobrancaRepository;
 import com.victor.repository.VendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PagamentoService {
@@ -25,40 +30,60 @@ public class PagamentoService {
     @Autowired
     private SqsSender sqsSender;
 
+    @Autowired
+    private PagamentoMapper pagamentoMapper;
+
     @Transactional
-    public ProcessamentoPagamentoDTO processarPagamentos(ProcessamentoPagamentoDTO dto) {
+    public PagamentoResponseDTO processarPagamentos(PagamentoRequestDTO dto) {
 
-        // Validar existência do vendedor
-        Vendedor vendedor = vendedorRepository.findByCodigoVendedor(dto.getCodigoVendedor())
-                .orElseThrow(() -> new VendedorNotFoundException("Vendedor não encontrado."));
+        verificarSeVendedorExiste(dto);
 
-        // Processar cada pagamento
-        for (PagamentoDTO pagamento : dto.getPagamentos()) {
+        List<PagamentoDetalheResponseDTO> pagamentosResposta = new ArrayList<>();
 
-            // Validar existência da cobrança
-            Cobranca cobranca = cobrancaRepository.findByCodigoCobranca(pagamento.getCodigoCobranca())
-                    .orElseThrow(() -> new CobrancaNotFoundException("Código da cobrança não encontrado: " + pagamento.getCodigoCobranca()));
+        for (PagamentoDetalheRequestDTO requestDTO : dto.getPagamentos()) {
 
-            // Determinar status do pagamento
-            Double valorOriginal = cobranca.getValorOriginal();
-            Double valorPago = pagamento.getValorPago();
+            Cobranca cobranca = buscarCobranca(requestDTO);
 
-            Pagamento pagamentoProcessado;
+            Pagamento pagamentoProcessado = definirPagamentoComBaseNoValor(requestDTO, cobranca);
+            pagamentoProcessado.enviarParaFila(sqsSender, requestDTO);
 
-            if (valorPago < valorOriginal) {
-                pagamentoProcessado = new PagamentoParcial(pagamento.getCodigoCobranca(), valorPago);
-            } else if (valorPago.equals(valorOriginal)) {
-                pagamentoProcessado = new PagamentoTotal(pagamento.getCodigoCobranca(), valorPago);
-            } else {
-                pagamentoProcessado = new PagamentoExcedente(pagamento.getCodigoCobranca(), valorPago);
-            }
+            PagamentoDetalheResponseDTO pagamentoResposta = pagamentoMapper.toResponseDTO(requestDTO);
+            pagamentoResposta.setStatusPagamento(pagamentoProcessado.getStatusPagamento().toString());
 
-            pagamentoProcessado.enviarParaFila(sqsSender, pagamento);
-
-            pagamento.setStatusPagamento(pagamentoProcessado.getStatusPagamento());
-
+            pagamentosResposta.add(pagamentoResposta);
         }
 
-        return dto;
+        PagamentoResponseDTO responseDTO = pagamentoMapper.toResponseDTO(dto.getCodigoVendedor(), pagamentosResposta);
+
+        return responseDTO;
     }
+
+    private Cobranca buscarCobranca(PagamentoDetalheRequestDTO pagamento) {
+        return cobrancaRepository.findByCodigoCobranca(pagamento.getCodigoCobranca())
+                .orElseThrow(() -> new CobrancaNotFoundException("Código da cobrança não encontrado: " + pagamento.getCodigoCobranca()));
+    }
+
+    private Vendedor verificarSeVendedorExiste(PagamentoRequestDTO dto) {
+        return vendedorRepository.findByCodigoVendedor(dto.getCodigoVendedor())
+                .orElseThrow(() -> new VendedorNotFoundException("Vendedor não encontrado."));
+    }
+
+    private static Pagamento definirPagamentoComBaseNoValor(PagamentoDetalheRequestDTO pagamento, Cobranca cobranca) {
+
+        Double valorOriginal = cobranca.getValorOriginal();
+        Double valorPago = pagamento.getValorPago();
+
+        Pagamento pagamentoProcessado;
+
+        if (valorPago < valorOriginal) {
+            pagamentoProcessado = new PagamentoParcial(pagamento.getCodigoCobranca(), valorPago);
+        } else if (valorPago.equals(valorOriginal)) {
+            pagamentoProcessado = new PagamentoTotal(pagamento.getCodigoCobranca(), valorPago);
+        } else {
+            pagamentoProcessado = new PagamentoExcedente(pagamento.getCodigoCobranca(), valorPago);
+        }
+
+        return pagamentoProcessado;
+    }
+
 }
