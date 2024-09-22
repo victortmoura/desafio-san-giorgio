@@ -1,6 +1,7 @@
 package com.victor.controller;
 
-import com.victor.model.dto.ProcessamentoPagamentoDTO;
+import com.victor.model.dto.request.PagamentoRequestDTO;
+import com.victor.model.dto.response.PagamentoResponseDTO;
 import com.victor.service.PagamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,8 +24,8 @@ public class PagamentoController {
 
     @PostMapping
     @Operation(summary = "Processa pagamentos para um vendedor")
-    public ResponseEntity<ProcessamentoPagamentoDTO> processarPagamentos(@Valid @RequestBody ProcessamentoPagamentoDTO dto) {
-        ProcessamentoPagamentoDTO resultado = pagamentoService.processarPagamentos(dto);
+    public ResponseEntity<PagamentoResponseDTO> processarPagamentos(@Valid @RequestBody PagamentoRequestDTO dto) {
+        PagamentoResponseDTO resultado = pagamentoService.processarPagamentos(dto);
         return new ResponseEntity<>(resultado, HttpStatus.OK);
     }
 }
