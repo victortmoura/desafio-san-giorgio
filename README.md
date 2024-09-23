@@ -27,12 +27,15 @@ Este projeto é uma aplicação em Spring Boot que processa pagamentos, validand
 
 ## Configuração
 **Preencha suas credenciais**:
-- Abra o arquivo `application-local.properties` e insira suas credenciais AWS:
+- Abra o arquivo `application-local.properties.example` e insira suas credenciais AWS:
    ```properties
    aws.accessKeyId=YOUR_ACCESS_KEY_ID
    aws.secretKey=YOUR_SECRET_ACCESS_KEY
    aws.region=YOUR_AWS_REGION
-   spring.h2.console.enabled=true
+  
+## Configurações do H2:
+O console do H2 pode ser acessado em http://localhost:8080/h2-console.
+Use as configurações padrão para se conectar ao banco de dados em memória.
 
 ## Execução
 1. Inicie a aplicação:
