@@ -1,0 +1,19 @@
+# AWS Configuration
+aws.accessKeyId=YOUR_ACCESS_KEY_ID
+aws.secretKey=YOUR_SECRET_ACCESS_KEY
+aws.region=YOUR_AWS_REGION
+
+# Database Configuration
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# H2 Console Configuration
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# SQS Queue Configuration
+sqs.queue.parcial=https://sqs.sa-east-1.amazonaws.com/764705069250/PAGAMENTO-PARCIAL
+sqs.queue.total=https://sqs.sa-east-1.amazonaws.com/764705069250/PAGAMENTO-TOTAL
+sqs.queue.excedente=https://sqs.sa-east-1.amazonaws.com/764705069250/PAGAMENTO-EXCEDENTE
