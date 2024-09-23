@@ -42,6 +42,9 @@ Use as configurações padrão para se conectar ao banco de dados em memória.
    ```bash
    mvn spring-boot:run
    ```
+
+## Swagger
+1. Para acessar a documentação: http://localhost:8080/swagger-ui/index.html
    
 ## Uso da API
 1. Exemplo de requisição para o endpoint de pagamentos:
