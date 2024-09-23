@@ -6,5 +6,7 @@ import com.victor.model.entity.Vendedor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VendedorRepository extends JpaRepository<Vendedor, Long> {
-    Optional<Vendedor> findByCodigoVendedor(String codigoVendedor);
+
+    boolean existsByCodigoVendedor(String codigoVendedor);
+
 }
