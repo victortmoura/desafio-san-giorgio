@@ -1,20 +1,20 @@
 package com.victor.mapper;
 
-import com.victor.model.dto.PagamentoDTO;
-import com.victor.model.entity.Cobranca;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import com.victor.model.dto.request.PagamentoDetalheRequestDTO;
+import com.victor.model.dto.response.PagamentoDetalheResponseDTO;
+import com.victor.model.dto.response.PagamentoResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PagamentoMapper {
 
-    PagamentoMapper INSTANCE = Mappers.getMapper(PagamentoMapper.class);
+    @Mapping(target = "statusPagamento", ignore = true)
+    PagamentoDetalheResponseDTO toResponseDTO(PagamentoDetalheRequestDTO dto);
 
-    // Se precisar mapear atributos específicos
-    // Exemplo:
-    // @Mapping(source = "codigoCobranca", target = "codigoCobranca")
-    PagamentoDTO cobrancaToPagamentoDTO(Cobranca cobranca);
+    PagamentoResponseDTO toResponseDTO(String codigoVendedor, List<PagamentoDetalheResponseDTO> pagamentos);
 
-    // Outros mapeamentos conforme necessário
 }
 
