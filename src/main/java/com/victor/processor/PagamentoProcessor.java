@@ -2,35 +2,36 @@ package com.victor.processor;
 
 import com.victor.messaging.SqsSender;
 import com.victor.model.dto.request.PagamentoDetalheRequestDTO;
-import com.victor.model.entity.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.victor.model.entity.Cobranca;
+import com.victor.model.entity.Pagamento;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
+@AllArgsConstructor
 public class PagamentoProcessor {
 
-    @Autowired
+    private List<PagamentoStrategy> strategies;
     private SqsSender sqsSender;
 
     public Pagamento definirPagamentoComBaseNoValor(PagamentoDetalheRequestDTO pagamentoDetalheRequestDTO, Cobranca cobranca) {
 
         Double valorOriginal = cobranca.getValorOriginal();
         Double valorPago = pagamentoDetalheRequestDTO.getValorPago();
-        String codigoCobranca = pagamentoDetalheRequestDTO.getCodigoCobranca();
 
-        Pagamento pagamentoProcessado;
+        PagamentoStrategy pagamentoStrategy = strategies.stream()
+                .filter(strategy -> strategy.isAplicavel(valorPago, valorOriginal))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Estratégia de pagamento não definida."));
 
-        if (valorPago < valorOriginal) {
-            pagamentoProcessado = new PagamentoParcial(codigoCobranca, valorPago);
-        } else if (valorPago.equals(valorOriginal)) {
-            pagamentoProcessado = new PagamentoTotal(codigoCobranca, valorPago);
-        } else {
-            pagamentoProcessado = new PagamentoExcedente(codigoCobranca, valorPago);
-        }
+        Pagamento pagamento = pagamentoStrategy.processarPagamento(pagamentoDetalheRequestDTO);
 
-        pagamentoProcessado.enviarParaFila(sqsSender, pagamentoDetalheRequestDTO);
+        pagamentoStrategy.enviarParaFila(sqsSender, pagamentoDetalheRequestDTO);
 
-        return pagamentoProcessado;
+        return pagamento;
+
     }
 
 }
